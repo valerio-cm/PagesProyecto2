@@ -121,7 +121,7 @@
         //nombre.innerHTML = `Bienvenido: </br> //${iniciado}` 
 
         var vista = document.querySelector('#recetasPublicadas')
-        fetch('http://localhost:3000/Recetas')
+        fetch('https://proyecto2api201905743.herokuapp.com//Recetas')
         .then(response => response.json())
         .catch(error => {
           console.log(error)

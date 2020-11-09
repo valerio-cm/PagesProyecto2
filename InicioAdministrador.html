@@ -100,7 +100,7 @@
           var tabla = document.querySelector('#CuerpoUsuarios')
           
           
-          fetch('http://localhost:3000/Personas')
+          fetch('https://proyecto2api201905743.herokuapp.com//Personas')
 
           .then(response => response.json())
           .catch(error => {
@@ -144,7 +144,7 @@
       var data = []
       console.log(columns);
 
-      fetch('http://localhost:3000/Personas')
+      fetch('https://proyecto2api201905743.herokuapp.com//Personas')
 
         .then(response => response.json())
         .catch(error => {

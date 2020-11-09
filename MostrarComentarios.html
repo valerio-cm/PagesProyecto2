@@ -86,7 +86,7 @@
         var id = sessionStorage.buscar
         console.log(id)
 
-        fetch(`http://localhost:3000/Comentarios/${id}`)
+        fetch(`https://proyecto2api201905743.herokuapp.com//Comentarios/${id}`)
             .then(response => response.json())
             .catch(error => {
             console.log(error)
