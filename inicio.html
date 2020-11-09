@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    body {
+      background-image: url('https://img.freepik.com/vector-gratis/resumen-lineas-brillantes-fondo-blanco-gris_1017-25097.jpg?size=626&ext=jpg');
+    }
+    </style>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>CUK - 201905743</title>
+  <link rel ="icon" href="C:\Users\Valerio Choc\Desktop\Proyecto2\logo\logo.ico">
+
+  <!-- Bootstrap core CSS -->
+  <link href="bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="heroic-features.css" rel="stylesheet">
+
+</head>
+
+<body onload="Cargar()" id="main">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="inicio.html">CUK</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Jumbotron Header -->
+    <header class="jumbotron my-4">
+      <h1 class="display-3">CUK - Recetas de Cocina!!</h1>
+      <p class="lead">Cuk cuenta con recetas de exquisitos platillos, aperitivos y postres, para poder realizar en la comodidad de su hogar. <br>Sin duda una manera de realizar platillos de una forma natural y casera, con resultados deliciosos.</p>
+    </header>
+
+    <header class>
+      <h2 class="display-5">Recetas Publicadas</h2><br>
+    </header>
+
+    <!-- Page Features -->
+    <div class="row text-center" id="recetasPublicadas">
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Derechos Reservados 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <script>
+    function Cargar(){
+
+      
+      var iniciado = sessionStorage.usuario
+      var barra = document.querySelector('#navbarResponsive')
+      console.log(iniciado)
+
+
+      if (iniciado == null){
+        console.log(iniciado)
+        barra.innerHTML +=
+        `<ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Iniciar Sesión
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="registro.html">Registrarse</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="acerca.html">Acerca de</a>
+            </li>
+          </ul>`
+        }else{
+          barra.innerHTML +=
+          `<ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+            <a class="nav-link" href="PublicarReceta.html">Publicar Receta</a>
+          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="PerfilCliente.html">Modificar Perfil
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="CerrarSesion()" type="button" >Cerrar Sesion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="acerca.html">Acerca de</a>
+          </li>
+        </ul>`
+      }
+
+
+
+        //var nombre = document.querySelector('#logeado')
+        //var iniciado = sessionStorage.usuario
+        //nombre.innerHTML = `Bienvenido: </br> //${iniciado}` 
+
+        var vista = document.querySelector('#recetasPublicadas')
+        fetch('http://localhost:3000/Recetas')
+        .then(response => response.json())
+        .catch(error => {
+          console.log(error)
+        })
+        .then(res => {
+          for (var i in res) {
+              vista.innerHTML += 
+              `<div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                   <img class="card-img-top" src="${res[i].imagen}" height="300" alt="">
+                    <div class="card-body">
+                      <h4 class="card-title">${res[i].titulo}</h4>
+                       <p class="card-text">${res[i].resumen}</p>
+                    </div>
+                  <div class="card-footer">
+                    <button type="button" value="${res[i].id}" onclick="verReceta(this)" class="btn btn-primary">Saber mas!</button>
+                  </div>
+                </div>
+              </div>`
+          }
+
+        })
+    }
+    function verReceta(boton){
+      console.log(boton.value)
+        var idReceta = boton.value
+        sessionStorage.setItem("buscar", idReceta)
+        location.href="Receta.html"
+    }
+
+    function CerrarSesion(){
+      sessionStorage.removeItem("usuario")
+      alert(`Sesion Cerrada`)
+      location.href="inicio.html"
+      
+    }
+
+</script>
+
+</body>
+
+</html>

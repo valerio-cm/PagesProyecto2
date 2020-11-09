@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        body {
+          background-image: url('https://img.freepik.com/vector-gratis/resumen-lineas-brillantes-fondo-blanco-gris_1017-25097.jpg?size=626&ext=jpg');
+        }
+        </style>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>CUK - Recetas</title>
+  <link rel ="icon" href="C:\Users\Valerio Choc\Desktop\Proyecto2\logo\logo.ico">
+
+  <!-- Bootstrap core CSS -->
+  <link href="bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="heroic-features.css" rel="stylesheet">
+  <link rel="stylesheet" href="w3.css">
+  <link rel="stylesheet" href="css.css">
+
+</head>
+
+<body onload="CargarInfo()" id="main">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" >CUK</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="C:\Users\Valerio Choc\Desktop\Proyecto2\templates\InicioAdministrador.html">Usuarios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">Reacciones</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="C:\Users\Valerio Choc\Desktop\Proyecto2\templates\PerfilAdmin.html">Modificar Perfil</a>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="CerrarSesion()" type="button">Cerrar Sesion</a>
+            </li>
+          </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <header class>
+      <h2 class="display-5"><br><br>Recetas Publicadas</h2><br><br>
+    </header>
+
+    <!-- Page Features -->
+    <table class="w3-table-all w3-card-4 w3-centered">
+        <thead>
+          <tr class="w3-dark-grey">
+          <th scope="col">Titulo</th>
+          <th scope="col">Autor</th>
+          <th scope="col">Accion</th>
+          <th scope="col">Accion</th>
+          </tr>
+        </thead>
+        <tbody id="CuerpoRecetas">
+        </tbody>
+      </table><br><br>
+    <!-- /.row -->
+    <p>
+        <button onclick="cargarArchivo()" type="button" class="w3-button  w3-dark-grey">Cargar Recetas</button>
+        <input type="file" id="file" /></p>
+        <p><button onclick="GenerarReporte()" type="button" class="w3-button  w3-dark-grey">Generar Reporte</button></p>
+        </p>
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Derechos Reservados 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> 
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.2/jspdf.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.5/jspdf.plugin.autotable.min.js"></script>
+
+
+  <script>
+    function CargarInfo(){
+
+          var tabla = document.querySelector('#CuerpoRecetas')
+          
+          
+          fetch('http://localhost:3000/Recetas')
+
+          .then(response => response.json())
+          .catch(error => {
+            console.log(error)
+          })
+          .then(res => {
+            for (var i in res) {
+                tabla.innerHTML += 
+                `<tr>
+                <th>  ${res[i].titulo} </th>
+                <th>  ${res[i].autor} </th>
+                <th> <button type="button" value="${res[i].id}" onclick="verReceta(this)" class="btn btn-success">Modificar</button> </th>
+                <th> <button type="button" value="${res[i].id}" onclick="verComentarios(this)" class="btn btn-success">Comentarios</button> </th>
+                </tr>`
+            }
+
+          })
+    }
+    function Registrar(){
+        location.href="Usuario.html"
+
+    }
+
+    function CerrarSesion(){
+      sessionStorage.removeItem("usuario")
+      sessionStorage.removeItem("tipo")
+      alert(`Sesion Cerrada`)
+      location.href="inicio.html"
+      
+    }
+
+    function verReceta(boton){
+          var rece = boton.value
+          sessionStorage.setItem("buscar", rece)
+          location.href="ModificarReceta.html"
+    }
+    function verComentarios(boton){
+          var rece = boton.value
+          console.log(rece)
+          sessionStorage.setItem("buscar", rece)
+          location.href="MostrarComentarios.html"
+    }
+    function cargarArchivo(){
+
+        $('#file').parse({
+      		config: {
+			     delimiter: ",",
+			     complete: CargarRecetas,
+		      },
+      		before: function(file, inputElem)
+      		{
+      			console.log("Parsing file...", file);
+      		},
+      		error: function(err, file)
+      		{
+      			console.log("ERROR:", err, file);
+      		},
+      		complete: function()
+      		{
+            console.log("Done with all files");
+          }
+        });
+
+    }
+
+    function CargarRecetas(results){
+        
+        console.log(results.data)
+        var user = sessionStorage.usuario
+        var data = results.data;
+        var val = true
+
+        for (i = 0; i < data.length; i++) {
+            var autor = data[i][0]
+            var titulo = data[i][1]
+            var resumen = data[i][2]
+            var ingredientes = data[i][3]
+            var preparacion = data[i][4]
+            var tiempo = data[i][5]
+            var imagen = data[i][6]
+            var objeto = {
+                'autor': autor,
+                'titulo': titulo,
+                'resumen': resumen,
+                'ingredientes': ingredientes,
+                'preparacion': preparacion,
+                'tiempo': tiempo,
+                'imagen': imagen
+
+            }
+            console.log(objeto)
+
+            fetch('http://localhost:3000/Recetas', {
+            method: 'POST',
+            body: JSON.stringify(objeto),
+            headers:{
+                'Content-Type': 'application/json'
+            }
+            }).then(res => res.json())
+            .catch(error => {
+                console.error('Error:', error)
+                alert("Ocurrio un error al consumir la API, revise la consola")
+                val = false
+            })
+            .then(response =>{
+                console.log('Success:', response);
+            }) 
+        }
+        if(val = true){
+            alert("Se agregaron las canciones exitosamente")
+    		location.reload()
+        }
+
+        
+    }
+    function GenerarReporte(){
+
+        var pdf = new jsPDF()
+        pdf.text(20,30,"Tabla informativa de Recetas");
+
+        var columns =   ["No", "Titulo", "Resumen", "Autor"]
+        var data = []
+        var cont = 1
+        var flag = false
+        var data = []
+        console.log(columns);
+
+        fetch('http://localhost:3000/Recetas')
+
+          .then(response => response.json())
+          .catch(error => {
+            console.log(error)
+          })
+          .then(res => {
+            for (var i in res) {
+                var titulo = res[i].titulo
+                var resumen = res[i].resumen
+                var autor = res[i].autor
+                var dato = [ 
+                    cont,titulo,resumen,autor
+                ]
+                data.push(dato)
+                cont += 1
+                console.log(dato)
+                console.log(data)
+                console.log(flag)
+                flag = true
+            }
+            console.log(flag)
+            if(flag == true){
+            console.log(data)
+            pdf.autoTable(columns,data,
+                { margin:{ top: 35 }})
+
+            pdf.save('recetas.pdf')
+
+          }
+          });
+            
+            
+
+        
+
+
+    }
+
+</script>
+
+</body>
+
+</html>

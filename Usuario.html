@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    body {
+      background-image: url('https://img.freepik.com/vector-gratis/resumen-lineas-brillantes-fondo-blanco-gris_1017-25097.jpg?size=626&ext=jpg');
+    }
+    </style>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>CUK - Usuarios</title>
+  <link rel ="icon" href="C:\Users\Valerio Choc\Desktop\Proyecto2\logo\logo.ico">
+
+  <!-- Bootstrap core CSS -->
+  <link href="bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="heroic-features.css" rel="stylesheet">
+  <link rel="stylesheet" href="w3.css">
+  <link rel="stylesheet" href="css.css">
+
+</head>
+
+<body onload="CargarInfo()" id="main">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" >CUK</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="C:\Users\Valerio Choc\Desktop\Proyecto2\templates\registro.html">Recetas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">Reacciones</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="C:\Users\Valerio Choc\Desktop\Proyecto2\templates\registro.html">Modificar Perfil</a>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="CerrarSesion()" type="button">Cerrar Sesion</a>
+            </li>
+          </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <header class>
+      <h2 class="display-3">Registrar Usuario</h2><br>
+    </header>
+
+
+    <!-- Page Features -->
+    <div class="w3-container w3-padding-64">
+
+        <div class="w3-card-4">
+            <div class="w3-container w3-dark-grey">
+              <h2>Registrar Usuario</h2>
+            </div>
+            <form class="w3-container" action="/action_page.php">
+              <p><br>      
+              <label class="w3-text-darkgrey"><b>Nombre</b></label>
+              <input class="w3-input w3-border w3-sand-black" id="nombre" type="text"></p>
+              <p>      
+              <label class="w3-text-dark-grey"><b>Apellido</b></label>
+              <input class="w3-input w3-border w3-sand-black" id="apellido" type="text"></p>
+              <p>
+              <label class="w3-text-dark-grey"><b>Nombre de Usuario</b></label>
+              <input class="w3-input w3-border w3-sand-black" id="usuario" type="text"></p>
+              <p> 
+              <label class="w3-text-dark-grey"><b>Contraseña</b></label>
+              <input class="w3-input w3-border w3-sand-black" id="contrasena" type="password"></p>
+              <p>
+                <label class="w3-text-dark-grey"><b>Confirmar Contraseña</b></label>
+                <input class="w3-input w3-border w3-sand-black" id="confirmar_contrasena" type="password"></p>
+              <p>  
+              <button onclick="validarCampo()" type="button" class="w3-btn w3-dark-grey">Crear Cuenta</button></p>
+            </form>
+          </div>
+        </div>
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Derechos Reservados 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <script>
+    function validarCampo() {
+        var nombre = document.querySelector('#nombre').value
+        var apellido = document.querySelector('#apellido').value
+        var usuario = document.querySelector('#usuario').value
+        var contrasena = document.querySelector('#contrasena').value
+        var ccontrasena = document.querySelector('#confirmar_contrasena').value
+        
+        if (nombre == '' || apellido == '' || usuario == '' || contrasena == '' ) {
+            alert('Todos los campos son obligatorios');
+            
+        }else{
+            if(ccontrasena == contrasena){
+                Registrarse();
+
+            }else{
+                alert('Las contraseñas no coinciden');
+            }
+
+        }
+    }
+    function Registrarse(){
+    var nombre = document.querySelector('#nombre').value
+    var apellido = document.querySelector('#apellido').value
+    var usuario = document.querySelector('#usuario').value
+    var contrasena = document.querySelector('#contrasena').value
+    var tipo = 'administrador'
+    var objeto = {
+        'nombre': nombre,
+        'apellido': apellido,
+        'usuario': usuario,
+        'contrasena': contrasena,
+        'tipo': tipo
+
+    }
+    console.log(objeto)
+    
+    fetch('http://localhost:3000/Personas', {
+
+    method: 'POST', 
+    body: JSON.stringify(objeto), 
+    headers:{
+        'Content-Type': 'application/json'
+    }
+    }).then(res => res.json())
+    .catch(err => {
+        console.error('Error:', err)
+        alert("Ocurrio un error, ver la consola")
+    })
+    .then(response =>{
+        
+    console.log('Succes' ,response);
+    console.log(response.message)
+    if(response.message == "Failed"){
+        alert(response.reason)
+    }else{
+        alert(response.reason)
+        location.href="InicioAdministrador.html"
+    }
+    }) 
+    }
+
+    function CerrarSesion(){
+      sessionStorage.removeItem("usuario")
+      sessionStorage.removeItem("tipo")
+      alert(`Sesion Cerrada`)
+      location.href="inicio.html"
+      
+    }
+
+</script>
+
+</body>
+
+</html>

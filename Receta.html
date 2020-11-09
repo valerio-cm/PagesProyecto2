@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        body {
+          background-image: url('https://img.freepik.com/vector-gratis/resumen-lineas-brillantes-fondo-blanco-gris_1017-25097.jpg?size=626&ext=jpg');
+        }
+        </style>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>CUK - Receta</title>
+  <link rel ="icon" href="C:\Users\Valerio Choc\Desktop\Proyecto2\logo\logo.ico">
+
+  <!-- Bootstrap core CSS -->
+  <link href="bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="heroic-features.css" rel="stylesheet">
+  <link rel="stylesheet" href="w3.css">
+  <link rel="stylesheet" href="css.css">
+
+
+</head>
+
+<body onload="Cargar()" id="main">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="inicio.html">CUK</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container" id ="cuerpo">
+
+  </div>
+  <div class="w3-card-5 container" id ="publicar">
+    <hr style="height:3px;border-width:0;color:gray;background-color:gray">
+    <br>
+
+  </div>
+  <div class="container" id = "comment">
+    <br><header class>
+        <h2 class="display-5" ><centering>Comentarios:</centering></h2><br>
+    </header>
+  </div><br>
+  
+
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Derechos Reservados 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+</body>
+
+<script>
+    function Cargar(){
+
+      
+        var iniciado = sessionStorage.usuario
+        var barra = document.querySelector('#navbarResponsive')
+        console.log(iniciado)
+
+
+        if (iniciado == null){
+            console.log(iniciado)
+            barra.innerHTML +=
+            `<ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                <a class="nav-link" href="login.html">Iniciar Sesión
+                    <span class="sr-only">(current)</span>
+                </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="registro.html">Registrarse</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="acerca.html">Acerca de</a>
+                </li>
+            </ul>`
+            }else{
+            barra.innerHTML +=
+            `<ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                <a class="nav-link" href="login.html">Perfil
+                <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="CerrarSesion()" type="button" >Cerrar Sesion</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="acerca.html">Acerca de</a>
+            </li>
+            </ul>`
+        }
+
+
+
+            //var nombre = document.querySelector('#logeado')
+            //var iniciado = sessionStorage.usuario
+            //nombre.innerHTML = `Bienvenido: </br> //${iniciado}` 
+
+            var cargar = sessionStorage.buscar
+            console.log(cargar)
+            var rece = document.querySelector('#cuerpo')
+
+            fetch(`http://localhost:3000/Recetas/${cargar}`)
+            .then(response => response.json())
+            .catch(error => {
+            console.log(error)
+            })
+            .then(res => {
+                console.log(res)
+                rece.innerHTML +=
+                `<header class>
+                    <h2 class="display-3" ><center>${res.titulo}</center></h2><br>
+                </header>
+                <img class="w3-center" src="${res.imagen}"" alt="" style="display:block;margin:auto" width="1000" height="600"><br><br>
+                <h3><strong>${res.resumen}</strong></h3><br>
+                <header class>
+                    <h2 class="display-5">Ingredientes:</h2><br>
+                </header>
+                <p class="card-text">${res.ingredientes}</p>
+                <header class>
+                    <h2 class="display-5">Preparacion:</h2><br>
+                </header>
+                <p class="card-text">${res.preparacion}</p><br>
+                <p class="card-text"><strong>Tiempo de preparacion estimado: </strong>${res.tiempo}</p><br>
+                <p class="card-text"><strong>Autor: </strong>${res.autor}</p><br>
+
+                <button onclick="Volver()" type="button" class="w3-button w3-dark-grey">Regresar</button></br><br><br>
+                `
+                
+            })
+            if (iniciado == null){
+                    MostrarComentarios()
+
+            }else{
+
+                var publicar = document.querySelector('#publicar')
+                publicar.innerHTML+=
+                `
+                <form class="w3-container" action="/action_page.php">
+                <p><br>
+                    <label class="w3-text-dark-grey"><b><strong>Agregar Comentario:</strong></b></label><br>
+                    <input class="w3-input w3-border w3-sand-black" id="comentario" type="text">
+                </p>
+                <p>  
+                    <button onclick="ValidarComentario()" type="button" class="w3-btn w3-dark-grey">Comentar</button>
+                 </p>
+                 </form>
+                 <hr style="height:3px;border-width:0;color:gray;background-color:gray"><br>
+                `
+                    MostrarComentarios();
+            }
+
+    }
+    function ValidarComentario(){
+
+        var ingreso = document.querySelector('#comentario').value
+        if (ingreso == '' ) {
+            alert('El campo esta vacio');
+            
+        }else{
+            PublicarComentario();
+
+        }
+    }
+
+    function PublicarComentario(){
+
+        var id = sessionStorage.buscar
+        var texto = document.querySelector('#comentario').value
+        var usuario = sessionStorage.usuario
+        var objeto = {
+        'id': id,
+        'autor': usuario,
+        'texto': texto
+
+        }
+        console.log(objeto)
+
+        fetch('http://localhost:3000/Comentarios', {
+
+        method: 'POST', 
+        body: JSON.stringify(objeto), 
+        headers:{
+            'Content-Type': 'application/json'
+        }
+        }).then(res => res.json())
+        .catch(err => {
+            console.error('Error:', err)
+            alert("Ocurrio un error, ver la consola")
+        })
+        .then(response =>{
+            
+        console.log('Success' ,response);
+        console.log(response.message)
+        location.reload()
+
+        }) 
+
+    }
+
+    function MostrarComentarios(){
+        var id = sessionStorage.buscar
+        var usuario = sessionStorage.usuario
+        var comentar = document.querySelector('#comment')
+        console.log(comentar)
+
+        fetch(`http://localhost:3000/Comentarios/${id}`)
+            .then(response => response.json())
+            .catch(error => {
+            console.log(error)
+            })
+            .then(res => {
+                console.log(res)
+                for (var i in res) {
+                    comentar.innerHTML +=
+                `
+                <hr style="height:1px;border-width:0;color:gray;background-color:gray">
+                <p> 
+                <a class="card-text w3-large"><strong>${res[i].autor}: </strong></a>
+                <a class=" card-text w3-small">${res[i].fecha}</a>
+                </p>
+                <p class="card-text">${res[i].texto}</p>
+                `
+
+                }
+                
+            })
+
+
+    }
+    function verUsuario(boton){
+        var usuario = boton.value
+        sessionStorage.setItem("buscar", usuario)
+        location.href="Perfil.html"
+        }
+
+    function Volver(){
+        location.href="inicio.html"
+    }
+
+    function CerrarSesion(){
+        sessionStorage.removeItem("usuario")
+        alert(`Sesion Cerrada`)
+        location.href="inicio.html"
+      
+    }
+      
+    
+
+</script>
+
+</html>

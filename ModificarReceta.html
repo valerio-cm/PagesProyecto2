@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    body {
+      background-image: url('https://img.freepik.com/vector-gratis/resumen-lineas-brillantes-fondo-blanco-gris_1017-25097.jpg?size=626&ext=jpg');
+    }
+    </style>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>CUK - Administrar Recetas</title>
+  <link rel ="icon" href="C:\Users\Valerio Choc\Desktop\Proyecto2\logo\logo.ico">
+
+  <!-- Bootstrap core CSS -->
+  <link href="bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="heroic-features.css" rel="stylesheet">
+  <link rel="stylesheet" href="w3.css">
+  <link rel="stylesheet" href="css.css">
+
+</head>
+
+<body onload="CargarInfo()" id="main">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" >CUK</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="C:\Users\Valerio Choc\Desktop\Proyecto2\templates\InicioAdministrador.html">Usuarios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">Reacciones</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="C:\Users\Valerio Choc\Desktop\Proyecto2\templates\PerfilAdmin.html">Modificar Perfil</a>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="CerrarSesion()" type="button">Cerrar Sesion</a>
+            </li>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <header class>
+      <h2 class="display-3">Modificar Receta</h2><br>
+    </header>
+
+
+    <!-- Page Features -->
+    <div class="w3-container w3-padding-64">
+
+        <div class="w3-card-4">
+            <div class="w3-container w3-dark-grey">
+              <h2>Modificar Receta</h2>
+            </div>
+            <form class="w3-container" action="/action_page.php">
+              <p><br>      
+              <label class="w3-text-darkgrey"><b>Titulo</b></label>
+              <input class="w3-input w3-border w3-sand-black" id="titulo" type="text"></p>
+              <p>      
+              <label class="w3-text-dark-grey"><b>Resumen</b></label>
+              <textarea id="resumen"  rows="4" cols="115"></textarea></p>
+              <p>
+              <label class="w3-text-dark-grey"><b>Ingredientes</b></label>
+              <textarea id="ingredientes"  rows="4" cols="115"></textarea></p>
+              <p> 
+              <label class="w3-text-dark-grey"><b>Preparacion</b></label>
+              <textarea id="preparacion"  rows="4" cols="115"></textarea></p>
+              <p>
+              <label class="w3-text-dark-grey"><b>Tiempo de preparacion</b></label>
+              <input class="w3-input w3-border w3-sand-black" id="tiempo" type="text"></p>
+              <p>
+                <label class="w3-text-dark-grey"><b>Link Imagen</b></label>
+                <input class="w3-input w3-border w3-sand-black" id="imagen" type="text"></p>
+              <p>  
+              <button onclick="validarCampo()" type="button" class="w3-btn w3-dark-grey">Modificar</button>
+              <button onclick="Eliminar()" type="button" class="w3-btn w3-dark-grey">Eliminar</button>
+              <button onclick="Volver()" type="button" class="w3-btn w3-dark-grey">Regresar</button>
+            </p>
+            </form>
+          </div>
+        </div>
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Derechos Reservados 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+    <script>
+        function CargarInfo(){
+
+        var res = sessionStorage.buscar
+        console.log(res)
+
+        fetch(`http://localhost:3000/Recetas/${res}`)
+        .then(response => response.json())
+        .catch(error => {
+            console.log(error)
+        })
+        .then(res =>{
+            console.log(res)
+            document.querySelector('#titulo').value = res.titulo
+            document.querySelector('#resumen').value = res.resumen
+            document.querySelector('#ingredientes').value = res.ingredientes
+            document.querySelector('#preparacion').value = res.preparacion
+            document.querySelector('#tiempo').value = res.tiempo
+            document.querySelector('#imagen').value = res.imagen
+        })
+        }
+        
+        function validarCampo() {
+
+        var titulo = document.querySelector('#titulo').value
+        var resumen = document.querySelector('#resumen').value
+        var ingredientes = document.querySelector('#ingredientes').value
+        var preparacion = document.querySelector('#preparacion').value
+        var tiempo = document.querySelector('#tiempo').value
+        var imagen = document.querySelector('#imagen').value
+        
+        if (titulo == '' || resumen == '' || ingredientes == '' || preparacion == '' || tiempo == '' || imagen == '') {
+            alert('Todos los campos son obligatorios');
+            
+        }else{
+            Modificar();
+
+        }
+        }
+
+    </script>
+
+  <script>
+    function Modificar(){
+
+        var ID = sessionStorage.buscar
+    var titulo = document.querySelector('#titulo').value
+    var resumen = document.querySelector('#resumen').value
+    var ingredientes = document.querySelector('#ingredientes').value
+    var preparacion = document.querySelector('#preparacion').value
+    var tiempo = document.querySelector('#tiempo').value
+    var imagen = document.querySelector('#imagen').value
+
+    var objeto = {
+        'titulo': titulo,
+        'resumen': resumen,
+        'ingredientes': ingredientes,
+        'preparacion': preparacion,
+        'tiempo': tiempo,
+        'imagen': imagen
+
+    }
+    console.log(objeto)
+
+    fetch(`http://localhost:3000/Recetas/${ID}`, {
+        method: 'PUT',
+        body: JSON.stringify(objeto),
+        headers:{
+            'Content-Type': 'application/json'
+        }
+        }).then(res => res.json())
+        .catch(error => {
+            console.error('Error:', error)
+            alert("Ocurrio un error al consumir la API, revise la consola")
+        })
+        .then(response =>{
+            console.log('Success:', response);
+            alert(response.reason)
+            location.href="AdminRecetas.html"
+            
+        })
+    }
+
+    function CerrarSesion(){
+        sessionStorage.removeItem("usuario")
+        alert(`Sesion Cerrada`)
+        location.href="inicio.html"
+      
+    }
+
+    function Eliminar(){       
+        var idReceta = sessionStorage.buscar
+        fetch(`http://localhost:3000/Recetas/${idReceta}`, {
+        method: 'DELETE',
+        }).then(res => res.json())
+        .catch(error => {
+            console.error('Error:', error)
+            alert("Ocurrio un error al consumir la API, revise la consola")
+        })
+        .then(response =>{
+            console.log('Success:', response);
+            alert(response.message)
+            location.href="AdminRecetas.html"
+        }) 
+    }
+    function Volver(){
+        location.href="AdminRecetas.html"
+    }
+
+</script>
+
+</body>
+
+</html>
