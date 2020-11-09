@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   <title>CUK - Publicar Receta</title>
-  <link rel ="icon" href="C:\Users\Valerio Choc\Desktop\Proyecto2\logo\logo.ico">
+  <link rel ="icon" href="logo\logo.ico">
 
   <!-- Bootstrap core CSS -->
   <link href="bootstrap.min.css" rel="stylesheet">
@@ -26,20 +26,20 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="C:\Users\Valerio Choc\Desktop\Proyecto2\templates\inicio.html">CUK</a>
+      <a class="navbar-brand" href="inicio.html">CUK</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="C:\Users\Valerio Choc\Desktop\Proyecto2\templates\Perfil.html">Modificar Perfil</a>
+            <a class="nav-link" href="Perfil.html">Modificar Perfil</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" onclick="CerrarSesion()" type="button" >Cerrar Sesion</a>
         </li>
           <li class="nav-item">
-            <a class="nav-link" href="C:\Users\Valerio Choc\Desktop\Proyecto2\templates\acerca.html">Acerca de</a>
+            <a class="nav-link" href="acerca.html">Acerca de</a>
           </li>
         </ul>
       </div>
@@ -141,7 +141,7 @@
     }
     console.log(objeto)
     
-    fetch('https://proyecto2api201905743.herokuapp.com//Recetas', {
+    fetch('https://proyecto2api201905743.herokuapp.com/Recetas', {
 
     method: 'POST', 
     body: JSON.stringify(objeto), 

@@ -14,7 +14,7 @@
   <meta name="author" content="">
 
   <title>CUK - Usuarios</title>
-  <link rel ="icon" href="C:\Users\Valerio Choc\Desktop\Proyecto2\logo\logo.ico">
+  <link rel ="icon" href="logo\logo.ico">
 
   <!-- Bootstrap core CSS -->
   <link href="bootstrap.min.css" rel="stylesheet">
@@ -102,7 +102,7 @@
         var cargar = sessionStorage.usuario
         console.log(cargar)
 
-          fetch(`https://proyecto2api201905743.herokuapp.com//Personas/${cargar}`)
+          fetch(`https://proyecto2api201905743.herokuapp.com/Personas/${cargar}`)
           .then(response => response.json())
           .catch(error => {
             console.log(error)
@@ -154,7 +154,7 @@
             'contrasena':contrasena
         }
         console.log(objeto)
-        fetch(`https://proyecto2api201905743.herokuapp.com//Personas/${cargar}`, {
+        fetch(`https://proyecto2api201905743.herokuapp.com/Personas/${cargar}`, {
         method: 'PUT',
         body: JSON.stringify(objeto),
         headers:{
